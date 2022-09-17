@@ -1,0 +1,17 @@
+.button {
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.05);
+    transition: 300ms ease;
+  }
+
+  &--primary {
+    background-color: var(--background-base, #1ed760);
+    color: var(--text-base, #000000);
+    border-radius: 500px;
+    font-size: inherit;
+    padding: 14px 32px;
+  }
+}
