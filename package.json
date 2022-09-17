@@ -8,7 +8,8 @@
     "ng": "ng",
     "dev": "ng serve --port 1420",
     "build": "ng build",
-    "watch": "ng build --watch --configuration development"
+    "watch": "ng build --watch --configuration development",
+    "local": "tauri dev"
   },
   "dependencies": {
     "@tauri-apps/api": "^1.0.2",

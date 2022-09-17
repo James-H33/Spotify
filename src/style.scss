@@ -1,0 +1,16 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html, body  {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+}
+
+
+:root {
+  --background-base: #1ed760;
+  --text-base: #000;
+}
+
+@import './styles/atoms';

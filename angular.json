@@ -22,7 +22,7 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/style.css"],
+            "styles": ["src/style.scss"],
             "scripts": []
           },
           "configurations": {
