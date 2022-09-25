@@ -3,7 +3,17 @@
     <img src="/assets/spotify.svg" alt="spotify logo">
   </div>
 
-  <div class="login-form">
+
+  <div class="login-content">
+    <h2>Authorize With Spotify!</h2>
+    <p>Click below to authorize with Spotify and then return to the application upon success.</p>
+
+    <button primaryButton (click)="openChromeToAuthorize()">
+      Log in
+    </button>
+  </div>
+
+  <!-- <div class="login-form">
     <div class="label-group">
       <label for="">Email address or username</label>
       <input type="username" placeholder="email or username">
@@ -14,8 +24,8 @@
       <input type="password" placeholder="password">
     </div>
 
-    <div class="login-actions">
-      <button primaryButton>Log in</button>
-    </div>
-  </div>
+    <div class="login-actions"> -->
+      <!-- <button primaryButton (click)="openChromeToAuthrize()">Log in</button> -->
+    <!-- </div> -->
+  <!-- </div> -->
 </div>
