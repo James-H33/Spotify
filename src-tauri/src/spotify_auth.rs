@@ -64,7 +64,7 @@ pub fn get_token() -> Result<String, String> {
 }
 
 async fn get_auth_token(code: &str) -> SpotifyTokenResponse {
-  let redirect_uri = REDIRECT_URI; // <- This is just used to verify the origial requests redirect_uri
+  let redirect_uri = REDIRECT_URI;
   let auth_code = "authorization_code";
 
   let params = [
@@ -87,9 +87,6 @@ async fn get_auth_token(code: &str) -> SpotifyTokenResponse {
   let result = res.unwrap();
   let token_res = result.json::<SpotifyTokenResponse>().await.unwrap();
 
-  // println!("Token: {}", token_res.access_token);
-  // println!("Expires: {}", token_res.expires_in);
-
   token_res
 }
 
@@ -102,24 +99,3 @@ fn make_query_str(params: &Vec<String>) -> String {
 
   query_str
 }
-
-
-// pub async fn get_spotify_auth_url() -> Json<SpotifyAuthUrl> {
-//   let scope = encode("user-read-private user-read-email");
-//   let redirect_uri = encode(REDIRECT_URI);
-
-//   let params: Vec<String> = vec![
-//     "&response_type=code".to_string(),
-//     format!("&client_id={}", CLIENT_ID),
-//     format!("&scope={}", scope.to_string()),
-//     format!("&redirect_uri={}", redirect_uri),
-//     format!("&state={}", STATE),
-//   ];
-
-//   let query_str = make_query_str(&params);
-//   let url = format!("https://accounts.spotify.com/authorize{}", query_str);
-
-//   Json(SpotifyAuthUrl {
-//     url: url
-//   })
-// }
