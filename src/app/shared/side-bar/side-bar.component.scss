@@ -1,0 +1,32 @@
+.side-bar {
+  max-width: 300px;
+  padding: 20px;
+  padding-top: 40px;
+}
+
+.side-bar-items {
+  display: grid;
+  row-gap: 20px;
+}
+
+.side-bar-item {
+  color: #000;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: color 300ms ease-in-out;
+
+  &:hover {
+    color: #555;
+  }
+
+  mat-icon {
+    display: block;
+    width: auto;
+  }
+
+  h4 {
+    margin: 0;
+    margin-left: 15px;
+  }
+}
