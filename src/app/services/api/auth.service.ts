@@ -1,18 +1,22 @@
 import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { invoke } from '@tauri-apps/api';
 import { open } from '@tauri-apps/api/shell';
-import { BehaviorSubject } from 'rxjs';
+import { IAppState } from '../stores/app-state';
+import { SharedActions } from '../stores/shared/shared.actions';
 
-const initialState = {
-  token: '',
-  isLoggenIn: false
-};
+// const initialState = {
+//   token: '',
+//   isLoggenIn: false
+// };
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  public $state: BehaviorSubject<any> = new BehaviorSubject(initialState);
+  constructor(
+    private store: Store<IAppState>
+  ) { }
 
   public async login() {
     let url: string = await invoke("get_spotify_auth_url");
@@ -27,8 +31,8 @@ export class AuthService {
       let token: string = await invoke("get_token");
 
       if (token) {
-        console.log('Token found');
-        this.$state.next({ token, isLoggedIn: true });
+        console.log('Token found', token);
+        this.store.dispatch(SharedActions.SetAuthToken(token));
       } else {
         this.pollForToken();
       }

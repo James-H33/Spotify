@@ -21,7 +21,7 @@ pub struct SpotifyAuthUrl {
 }
 
 pub fn get_spotify_auth_url() -> SpotifyAuthUrl {
-  let scope = encode("user-read-private user-read-email");
+  let scope = encode("user-read-private user-read-email user-top-read");
   let redirect_uri = encode(REDIRECT_URI);
 
   let params: Vec<String> = vec![
@@ -47,7 +47,6 @@ pub async fn handle_spotify_auth(code: Option<String>, state: Option<String>) ->
   unsafe {
     AUTH_TOKEN = response.access_token;
   }
-
 
   "Authorization Success! Return to application."
 }
