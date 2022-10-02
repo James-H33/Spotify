@@ -26,6 +26,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
     BrowserAnimationsModule
   ],
+  providers: [
+    { provide: 'Window', useFactory: () => window }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -56,10 +56,10 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 600,
+        "height": 800,
         "resizable": true,
-        "title": "spotify",
-        "width": 800
+        "title": "",
+        "width": 1000
       }
     ]
   }

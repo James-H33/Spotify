@@ -1,9 +1,9 @@
 use urlencoding::encode;
 use serde::Deserialize;
 
-static CLIENT_ID: &str = "";
-static SECRET: &str = "";
-static STATE: &str = "";
+static CLIENT_ID: &str = "fda86a2ffb1f42268b0e0198861006e9";
+static SECRET: &str = "e4220dcdb0794d1c8b390cae5c52070a";
+static STATE: &str = "d12dd12d12d2f3g3";
 static REDIRECT_URI: &str = "http://localhost:8000/spotify-auth-callback";
 static mut AUTH_TOKEN: String = String::new();
 
