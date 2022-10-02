@@ -20,22 +20,24 @@
 
         <div class="home-content-cards">
           <ng-container *ngFor="let item of recentlyPlayed">
-            <app-card></app-card>
+            <app-card [item]="item"></app-card>
           </ng-container>
         </div>
       </div>
+    </div>
 
-      <div class="home-content-body">
-        <div class="home-content-body-item">
-          <img src="" alt="">
-          <h6>Artist</h6>
-          <h6>Album</h6>
+    <div class="home-content">
+      <div class="home-content-header">
+        <h2>New For You</h2>
+
+        <div class="home-content-cards">
+          <ng-container *ngFor="let item of newForYou">
+            <app-card
+              [item]="item">
+            </app-card>
+          </ng-container>
         </div>
       </div>
     </div>
   </section>
 </div>
-
-<!-- <ng-container *ngIf="user$ | async as user">
-  <h2>{{ user.display_name }}</h2>
-</ng-container> -->

@@ -1,0 +1,11 @@
+.play-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  border: none;
+  outline: none;
+  background: var(--background-base);
+}
