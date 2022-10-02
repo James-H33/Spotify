@@ -42,7 +42,7 @@ export class UserService {
   }
 
   public getTopArtists(): Observable<TopItemsResponseDto> {
-    let url = `${this.baseUrl}/me/top/tracks`;
+    let url = `${this.baseUrl}/me/top/artists`;
     const top: any = new TopItemRequestDto();
     const params = new HttpParams()
       .set('limit', top.limit)

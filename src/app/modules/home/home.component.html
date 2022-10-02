@@ -32,7 +32,9 @@
 
         <div class="home-content-cards">
           <ng-container *ngFor="let item of newForYou">
-            <app-card [item]="item"></app-card>
+            <app-card
+              [item]="item">
+            </app-card>
           </ng-container>
         </div>
       </div>
