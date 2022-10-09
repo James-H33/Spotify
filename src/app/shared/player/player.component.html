@@ -36,8 +36,9 @@
       <app-progress-bar
         [max]="durationAsNum"
         [min]="0"
-        [step]="1"
-        [value]="currentTimeAsNum">
+        [step]=".25"
+        [value]="currentTimeAsNum"
+        (change)="updateCurrentTime($event)">
       </app-progress-bar>
 
       <div class="player-controls-progress-time">{{duration}}</div>
@@ -46,12 +47,13 @@
 
   <div class="player-volume">
     <mat-icon>volume_up</mat-icon>
-    <mat-slider
-      max="100"
-      min="0"
-      step="1"
-      aria-labelledby="song-progress">
-    </mat-slider>
-    <!-- <progress class="player-volume-bar" value="70" max="100"></progress> -->
+
+    <app-progress-bar
+      [max]="volumeControl.max"
+      [min]="volumeControl.min"
+      [step]="volumeControl.step"
+      [value]="volumeControl.value"
+      (change)="updateVolume($event)">
+    </app-progress-bar>
   </div>
 </div>

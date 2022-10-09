@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MatSliderChange } from '@angular/material/slider';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, combineLatest, filter, map, of, switchMap, tap } from 'rxjs';
 import { IAppState } from 'src/app/services/stores/app-state';
@@ -11,12 +12,23 @@ import { selectCurrentTrack, selectPlaySong } from 'src/app/services/stores/shar
   styleUrls: ['./player.component.scss']
 })
 export class PlayerComponent {
+  public volumeControl = {
+    max: 1,
+    min: 0,
+    step: 0.01,
+    value: 0.5
+  };
+
+  public hasTrack = false;
+
   public currentTrack$ = this.store.select(selectCurrentTrack)
     .pipe(
+      tap(track => track ? this.hasTrack = true : this.hasTrack = false),
       tap(() => this.audioPlayer?.pause()),
       tap(() => this.resetAudioTime()),
       tap(() => this.stopCurrentTimeUpdater()),
       tap((t: any) => this.audioPlayer = new Audio(t?.preview_url)),
+      tap((t: any) => this.audioPlayer.volume = this.volumeControl.value),
       switchMap((t) =>
         combineLatest([
             of(t),
@@ -49,13 +61,31 @@ export class PlayerComponent {
     private store: Store<IAppState>
   ) { }
 
-  public togglePlay(play: boolean) {
+  public togglePlay({ event, play }: any) {
+    if (!this.hasTrack) {
+      return;
+    }
+
     this.store.dispatch(SharedActions.SetPlaySong(play));
   }
 
-  private playCurrentTrack(playSong: boolean) {
-    this.audioPlayer.volume = 0.5;
+  public updateVolume(change: MatSliderChange) {
+    const value = change.value ?? 0.5;
+    this.volumeControl.value = value;
+    this.audioPlayer.volume = value;
+  }
 
+  public updateCurrentTime(change: MatSliderChange) {
+    const value = change.value ?? this.audioPlayer.currentTime;
+
+    if (value === this.audioPlayer.currentTime) {
+      return;
+    }
+
+    this.audioPlayer.currentTime = value;
+  }
+
+  private playCurrentTrack(playSong: boolean) {
     if (playSong) {
       this.audioPlayer.play();
       this.initCurrentTimeUpdater();
@@ -70,8 +100,13 @@ export class PlayerComponent {
     this.durationAsNum = Math.floor(this.audioPlayer.duration);
 
     this.interval = setInterval(() => {
-      this.currentTimeAsNum = Math.floor(this.audioPlayer.currentTime);
+      this.currentTimeAsNum = this.audioPlayer.currentTime;
       this.currentTime = this.msToTime(this.audioPlayer.currentTime * 1000 || 0);
+
+      if (this.currentTimeAsNum >= this.durationAsNum) {
+        this.stopCurrentTimeUpdater();
+        this.store.dispatch(SharedActions.SetPlaySong(false));
+      }
     }, 250);
   }
 

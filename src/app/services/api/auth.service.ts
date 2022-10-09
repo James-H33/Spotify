@@ -15,10 +15,8 @@ export class AuthService {
 
   public async login() {
     let url: string = await invoke("get_spotify_auth_url");
-
-    open(url);
-
     this.pollForToken();
+    open(url);
   }
 
   public async pollForToken() {
@@ -26,7 +24,6 @@ export class AuthService {
       let token: string = await invoke("get_token");
 
       if (token) {
-        console.log('Token found', token);
         localStorage.setItem('access_token', token);
         this.store.dispatch(SharedActions.SetAuthToken(token));
       } else {
