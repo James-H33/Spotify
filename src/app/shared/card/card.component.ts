@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Inject, Input, Output, ViewChild } from '@angular/core';
 import { fromEvent, Subject, takeUntil, tap } from 'rxjs';
 import { Track } from 'src/app/services/api/models/track';
 
@@ -9,12 +9,11 @@ import { Track } from 'src/app/services/api/models/track';
 })
 export class CardComponent {
   @Input() public item?: Track = new Track();
+  @Output() public selected = new EventEmitter<{track:  Track, play: boolean}>();
 
   @ViewChild('CardImageWrapper')
   public set cardImageWrapper(el: any) {
     this._cardImageWrapper = el;
-
-    console.log('CardImageWrapper Set: ', el);
 
     this.adjustCardHeight();
   }
@@ -36,6 +35,16 @@ export class CardComponent {
   public ngOnDestroy() {
     this.destroy$.next(true);
     this.destroy$.complete();
+  }
+
+  public onSelect() {
+    console.log('OnSelect');
+    this.selected.emit({ track: this.item as any, play: false });
+  }
+
+  public onSelectAndPlay() {
+    console.log('OnSelectAndPlay');
+    this.selected.emit({ track: this.item as any, play: true });
   }
 
   private adjustCardHeight() {

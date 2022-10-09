@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { tap } from 'rxjs';
-import { Artist } from 'src/app/services/api/models/artist';
+import { Track } from 'src/app/services/api/models/track';
 import { UserService } from 'src/app/services/api/user.service';
 import { IAppState } from 'src/app/services/stores/app-state';
+import { SharedActions } from 'src/app/services/stores/shared/shared.actions';
 import { selectUser } from 'src/app/services/stores/shared/shared.selector';
 
 @Component({
@@ -17,8 +18,8 @@ export class HomeComponent implements OnInit {
       tap(user => console.log('User: ', user))
     );
 
-  public recentlyPlayed: Artist[] = [];
-  public newForYou: Artist[] = [];
+  public recentlyPlayed: Track[] = [];
+  public newForYou: Track[] = [];
 
   constructor(
     private store: Store<IAppState>,
@@ -28,8 +29,13 @@ export class HomeComponent implements OnInit {
   public ngOnInit() {
     this.userService.getTopTracks()
       .subscribe((res: any) => {
-        this.recentlyPlayed = res.items.slice(0, 5);
-        this.newForYou = res.items.slice(5, 20);
+        const tracks = res.items.map((x: any) => new Track(x));
+        this.recentlyPlayed = tracks.slice(0, 5);
+        this.newForYou = tracks.slice(5, 20);
       });
+  }
+
+  public trackSelected(item: { track: Track, play: boolean }) {
+    this.store.dispatch(SharedActions.SetCurrentTrack(item.track, item.play));
   }
 }

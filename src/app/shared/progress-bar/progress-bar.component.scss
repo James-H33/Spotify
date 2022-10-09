@@ -1,0 +1,25 @@
+.progress-bar {
+  mat-slider {
+    width: 100%;
+    height: auto;
+    padding: 0;
+
+    ::ng-deep {
+      .mat-slider-wrapper {
+        top: 0;
+      }
+
+      .mat-slider-track-wrapper {
+        background-color: #e1e1e1;
+      }
+
+      .mat-slider-thumb, .mat-slider-track-fill {
+        background-color: var(--background-base) !important;
+      }
+
+      .mat-slider-horizontal {
+        height: 0;
+      }
+    }
+  }
+}

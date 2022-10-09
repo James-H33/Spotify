@@ -1,3 +1,9 @@
-<div class="play-button">
-  <mat-icon>play_arrow</mat-icon>
+<div class="play-button" (click)="trigger()">
+  <mat-icon *ngIf="!isPlaying">
+    play_arrow
+  </mat-icon>
+
+  <mat-icon *ngIf="isPlaying">
+    pause
+  </mat-icon>
 </div>

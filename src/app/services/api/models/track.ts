@@ -18,8 +18,11 @@
   uri: "spotify:track:6NHpyYvJyQsg2nXXzGYc2R"
 */
 
+import { Album } from './album';
+import { Image } from './image';
+
 export class Track {
-  public album?: any;
+  public album?: Album;
   public artists?: any[];
   public available_markets?: string[];
   public disc_number?: number;
@@ -36,4 +39,49 @@ export class Track {
   public track_number?: number;
   public type?: string;
   public uri?: string;
+
+  constructor(data?: any) {
+    const defaults = {
+      album: new Album(),
+      artists: [],
+      available_markets: [],
+      disc_number: 0,
+      duration_ms: 0,
+      explicit: false,
+      external_ids: {},
+      external_urls: {},
+      href: '',
+      id: '',
+      is_local: false,
+      name: '',
+      popularity: 0,
+      preview_url: '',
+      track_number: 0,
+      type: '',
+      uri: '',
+      ...data
+    };
+
+    this.album = defaults.album;
+    this.artists = defaults.artists;
+    this.available_markets = defaults.available_markets;
+    this.disc_number = defaults.disc_number;
+    this.duration_ms = defaults.duration_ms;
+    this.explicit = defaults.explicit;
+    this.external_ids = defaults.external_ids;
+    this.external_urls = defaults.external_urls;
+    this.href = defaults.href;
+    this.id = defaults.id;
+    this.is_local = defaults.is_local;
+    this.name = defaults.name;
+    this.popularity = defaults.popularity;
+    this.preview_url = defaults.preview_url;
+    this.track_number = defaults.track_number;
+    this.type = defaults.type;
+    this.uri = defaults.uri;
+  }
+
+  public get firstImage(): Image {
+    return this.album?.images?.[0] as any;
+  }
 }

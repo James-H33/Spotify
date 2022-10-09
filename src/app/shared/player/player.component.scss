@@ -1,0 +1,80 @@
+.player {
+  display: grid;
+  grid-template-columns: 300px minmax(500px, 900px) auto;
+  align-items: center;
+  column-gap: 20px;
+  height: 100px;
+  padding: 0 20px;
+  background: white;
+
+  img {
+    width: 80px;
+  }
+
+  mat-icon {
+    cursor: pointer;
+  }
+
+  .player-info {
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+    min-width: 200px;
+    overflow-x: hidden;
+
+    .player-info-text {
+      .player-info-text-title {
+        font-size: 0.9rem;
+      }
+
+      .player-info-text-artist {
+        font-size: 0.7rem;
+        color: #666;
+      }
+    }
+  }
+
+  app-progress-bar {
+    width: 100%;
+  }
+
+  .player-controls {
+    width: 100%;
+    display: grid;
+    justify-items: center;
+
+    .player-controls-panel {
+      display: flex;
+      align-items: center;
+      column-gap: 10px;
+      justify-content: center;
+      width: 100%;
+      max-width: 300px;
+      justify-self: center;
+
+      mat-icon, app-play-button {
+        cursor: pointer;
+      }
+    }
+
+    .player-controls-progress {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      max-width: 600px;
+
+      .player-controls-progress-time {
+        font-size: 0.7rem;
+        color: #666;
+        height: 14px;
+      }
+    }
+  }
+
+  .player-volume {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 10px;
+  }
+}

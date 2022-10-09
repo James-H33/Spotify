@@ -1,9 +1,11 @@
-<div class="card">
+<div class="card" (click)="onSelect()">
   <div #CardImageWrapper class="card-image">
     <img [src]="image.url" [alt]="image.url">
 
     <div class="card-play-button">
-      <app-play-button></app-play-button>
+      <app-play-button
+        (clicked)="onSelectAndPlay()">
+      </app-play-button>
     </div>
   </div>
 
