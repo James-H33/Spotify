@@ -1,9 +1,9 @@
 use urlencoding::encode;
 use serde::Deserialize;
 
-static CLIENT_ID: &str = "";
-static SECRET: &str = "";
-static STATE: &str = "";
+static mut CLIENT_ID: &str = "";
+static mut SECRET: &str = "";
+static mut STATE: &str = "";
 static REDIRECT_URI: &str = "http://localhost:8000/spotify-auth-callback";
 static mut AUTH_TOKEN: String = String::new();
 
@@ -24,19 +24,22 @@ pub fn get_spotify_auth_url() -> SpotifyAuthUrl {
   let scope = encode("user-read-private user-read-email user-top-read");
   let redirect_uri = encode(REDIRECT_URI);
 
-  let params: Vec<String> = vec![
-    "&response_type=code".to_string(),
-    format!("&client_id={}", CLIENT_ID),
-    format!("&scope={}", scope.to_string()),
-    format!("&redirect_uri={}", redirect_uri),
-    format!("&state={}", STATE),
-  ];
+  unsafe {
+    let params: Vec<String> = vec![
+      "&response_type=code".to_string(),
+      format!("&client_id={}", CLIENT_ID),
+      format!("&scope={}", scope.to_string()),
+      format!("&redirect_uri={}", redirect_uri),
+      format!("&state={}", STATE),
+    ];
 
-  let query_str = make_query_str(&params);
-  let url = format!("https://accounts.spotify.com/authorize{}", query_str);
 
-  SpotifyAuthUrl {
-    url
+    let query_str = make_query_str(&params);
+    let url = format!("https://accounts.spotify.com/authorize{}", query_str);
+
+    SpotifyAuthUrl {
+      url
+    }
   }
 }
 

@@ -6,7 +6,7 @@
   <section class="home-color-grad"></section>
 
   <section class="home-top-nav">
-    <h3>Profile Bar</h3>
+    <!-- <h3>Profile Bar</h3> -->
   </section>
 
   <section class="home-main">
@@ -20,7 +20,10 @@
 
         <div class="home-content-cards">
           <ng-container *ngFor="let item of recentlyPlayed">
-            <app-card [item]="item"></app-card>
+            <app-card
+              (selected)="trackSelected($event)"
+              [item]="item">
+            </app-card>
           </ng-container>
         </div>
       </div>
@@ -33,11 +36,16 @@
         <div class="home-content-cards">
           <ng-container *ngFor="let item of newForYou">
             <app-card
+              (selected)="trackSelected($event)"
               [item]="item">
             </app-card>
           </ng-container>
         </div>
       </div>
     </div>
+  </section>
+
+  <section class="home-player">
+    <app-player></app-player>
   </section>
 </div>

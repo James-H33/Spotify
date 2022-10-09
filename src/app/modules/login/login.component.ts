@@ -38,8 +38,7 @@ export class LoginComponent implements OnDestroy {
         switchMap(_ => this.userService.getUser())
       )
       .subscribe((user) => {
-        // debugger;
-        // console.log(user);
+        debugger;
         this.store.dispatch(SharedActions.SetUser(user));
         this.router.navigate(['']);
       });

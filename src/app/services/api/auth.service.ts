@@ -5,11 +5,6 @@ import { open } from '@tauri-apps/api/shell';
 import { IAppState } from '../stores/app-state';
 import { SharedActions } from '../stores/shared/shared.actions';
 
-// const initialState = {
-//   token: '',
-//   isLoggenIn: false
-// };
-
 @Injectable({
   providedIn: 'root'
 })
@@ -32,6 +27,7 @@ export class AuthService {
 
       if (token) {
         console.log('Token found', token);
+        localStorage.setItem('access_token', token);
         this.store.dispatch(SharedActions.SetAuthToken(token));
       } else {
         this.pollForToken();
