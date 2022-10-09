@@ -6,7 +6,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./play-button.component.scss']
 })
 export class PlayButtonComponent {
-  @Output() public clicked = new EventEmitter();
+  @Output() public clicked = new EventEmitter<{event: MouseEvent, play: boolean}>();
   @Input() set isPlaying(v: boolean | null) {
     this._isPlaying = v || false;
   }
@@ -17,8 +17,8 @@ export class PlayButtonComponent {
 
   private _isPlaying = false;
 
-  public trigger() {
-    this.clicked.emit(!this.isPlaying);
+  public trigger(e: MouseEvent) {
+    this.clicked.emit({ event: e, play: !this.isPlaying });
   }
 }
 

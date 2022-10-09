@@ -15,7 +15,7 @@ export const initialState: ISharedState = {
   token: '',
   isLoggedIn: false,
   currentTrack: null as any,
-  play: false
+  play: false,
 }
 
 export const sharedReducer = createReducer(

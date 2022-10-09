@@ -38,13 +38,12 @@ export class CardComponent {
   }
 
   public onSelect() {
-    console.log('OnSelect');
     this.selected.emit({ track: this.item as any, play: false });
   }
 
-  public onSelectAndPlay() {
-    console.log('OnSelectAndPlay');
-    this.selected.emit({ track: this.item as any, play: true });
+  public onSelectAndPlay({ event, play }: any) {
+    event.stopPropagation();
+    this.selected.emit({ track: this.item as any, play });
   }
 
   private adjustCardHeight() {
