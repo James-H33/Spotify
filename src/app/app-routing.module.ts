@@ -6,7 +6,7 @@ const routes: Routes = [
   {
     path: '',
     canActivate: [IsAuthorized],
-    loadChildren: () => import('./modules/home/home.module').then(m => m.HomeModule)
+    loadChildren: () => import('./modules/root/root.module').then(m => m.RootModule)
   },
   {
     path: 'login',

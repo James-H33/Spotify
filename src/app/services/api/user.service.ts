@@ -74,4 +74,21 @@ export class UserService {
         tap((response) => console.log(response))
       )
   }
+
+  public getSavedTracks() {
+    let url = `${this.baseUrl}/me/tracks`;
+    const top: any = new TopItemRequestDto();
+    const params = new HttpParams()
+      .set('limit', top.limit)
+      .set('time_range', top.time_range);
+
+    const headers = {
+      'Authorization': `Bearer ${this.token}`
+    }
+
+    return this.http.get(url, { headers, params })
+      .pipe(
+        tap((response) => console.log(response))
+      )
+  }
 }

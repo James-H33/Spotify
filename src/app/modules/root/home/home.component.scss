@@ -1,0 +1,37 @@
+.home {
+  width: 100%;
+  display: grid;
+
+  .home-header {
+    margin-bottom: 30px;
+  }
+
+  .home-main {
+    padding: 20px;
+    padding-left: 30px;
+    max-width: 1400px;
+    box-sizing: border-box;
+
+    h1 {
+      font-weight: bold;
+    }
+
+    .home-content-cards {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(200px, 350px));
+      column-gap: 30px;
+      row-gap: 20px;
+      margin-bottom: 50px;
+    }
+  }
+
+  // .home-color-grad {
+  //   position: absolute;
+  //   top: 0;
+  //   left: 250px;
+  //   right: 0;
+  //   height: 70vh;
+  //   background: linear-gradient(180deg, rgb(75, 111, 255) 0%, #fff 60%, #fff 100%);
+  //   z-index: -1;
+  // }
+}
