@@ -1,9 +1,9 @@
 use urlencoding::encode;
 use serde::Deserialize;
 
-static mut CLIENT_ID: &str = "";
-static mut SECRET: &str = "";
-static mut STATE: &str = "";
+static CLIENT_ID: &str = "";
+static SECRET: &str = "";
+static STATE: &str = "";
 static REDIRECT_URI: &str = "http://localhost:8000/spotify-auth-callback";
 static mut AUTH_TOKEN: String = String::new();
 
@@ -21,7 +21,8 @@ pub struct SpotifyAuthUrl {
 }
 
 pub fn get_spotify_auth_url() -> SpotifyAuthUrl {
-  let scope = encode("user-read-private user-read-email user-top-read");
+  // Scopes -> https://developer.spotify.com/documentation/general/guides/authorization/scopes/
+  let scope = encode("user-read-private user-read-email user-top-read user-library-read");
   let redirect_uri = encode(REDIRECT_URI);
 
   unsafe {
