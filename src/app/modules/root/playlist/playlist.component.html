@@ -1,1 +1,46 @@
-<h1>Playlist!!!</h1>
+<div class="playlist-container">
+  <h1>Liked Songs</h1>
+
+  <table mat-table [dataSource]="tracks" class="mat-elevation-z8">
+    <ng-container matColumnDef="position">
+      <th mat-header-cell *matHeaderCellDef># </th>
+      <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Title </th>
+      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="album">
+      <th mat-header-cell *matHeaderCellDef> Album </th>
+      <td mat-cell *matCellDef="let element"> {{element.album.name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="duration">
+      <th mat-header-cell *matHeaderCellDef> Duration </th>
+      <td mat-cell *matCellDef="let element"> {{element.duration_ms | msToTime}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="trackSelected(row)"></tr>
+  </table>
+
+
+  <!-- <table>
+    <thead>
+      <th>#</th>
+      <th>Title</th>
+      <th>Album</th>
+      <th>Duration</th>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let track of tracks; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ track.name }}</td>
+        <td>{{ track.album.name }}</td>
+        <td>{{ track.duration_ms | msToTime }}</td>
+      </tr>
+  </table> -->
+</div>
