@@ -1,4 +1,4 @@
-<div class="play-button" (click)="trigger($event)">
+<div class="play-button" [class.secondary]="styleType === 'secondary'" (click)="trigger($event)">
   <mat-icon *ngIf="!isPlaying">
     play_arrow
   </mat-icon>
