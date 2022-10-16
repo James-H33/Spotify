@@ -1,10 +1,46 @@
 <div class="playlist-container">
-  <h1>Liked Songs</h1>
+  <!-- <div class="playlist-header" [style]="{ background: 'url(' + currentTrack?.firstImage?.url + ')' }"> -->
+  <div class="playlist-header">
+    <div class="playlist-header-image">
+      <ng-container *ngIf="currentTrack?.id; else DefaultBackdrop">
+        <div
+          class="playlist-header-image-backdrop"
+          [style]="{ 'background-image': 'url(' + currentTrack?.firstImage?.url + ')' }">
+        </div>
+      </ng-container>
 
-  <table mat-table [dataSource]="tracks" class="mat-elevation-z8">
+      <ng-template #DefaultBackdrop>
+        <div class="playlist-header-image-default"></div>
+      </ng-template>
+
+      <div class="playlist-header-image-overlay"></div>
+    </div>
+
+    <div class="playlist-header-title">
+      <h1>Liked Songs</h1>
+      <p>Total Songs: {{totalSongs}}</p>
+    </div>
+  </div>
+
+  <table mat-table [dataSource]="tracks" (mouseleave)="tableMouseout()">
     <ng-container matColumnDef="position">
-      <th mat-header-cell *matHeaderCellDef># </th>
-      <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+      <th mat-header-cell *matHeaderCellDef>##</th>
+      <td mat-cell *matCellDef="let element">
+        <div class="playlist-play-col">
+          {{element.showPlay}}
+          <ng-container *ngIf="hoveredTrackId === element.id || currentTrack?.id === element.id">
+            <app-play-button
+              (clicked)="playTrack(element)"
+              [isPlaying]="(currentTrack?.id === element.id)"
+              [styleType]="playButtonStyleType">
+            </app-play-button>
+          </ng-container>
+
+          <ng-container *ngIf="hoveredTrackId !== element.id && currentTrack?.id !== element.id">
+            {{element.position}}
+          </ng-container>
+        </div>
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="name">
@@ -23,24 +59,12 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="trackSelected(row)"></tr>
+
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedColumns;"
+      (click)="trackSelected(row)"
+      (mouseenter)="trackHover(row)">
+    </tr>
   </table>
-
-
-  <!-- <table>
-    <thead>
-      <th>#</th>
-      <th>Title</th>
-      <th>Album</th>
-      <th>Duration</th>
-    </thead>
-
-    <tbody>
-      <tr *ngFor="let track of tracks; let i = index">
-        <td>{{ i + 1 }}</td>
-        <td>{{ track.name }}</td>
-        <td>{{ track.album.name }}</td>
-        <td>{{ track.duration_ms | msToTime }}</td>
-      </tr>
-  </table> -->
 </div>

@@ -8,4 +8,11 @@
   border: none;
   outline: none;
   background: var(--background-base);
+
+  &.secondary {
+    background: transparent;
+    height: 24px;
+    width: 24px;
+    border-radius: 50%;
+  }
 }
