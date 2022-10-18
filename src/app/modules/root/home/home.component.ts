@@ -13,11 +13,7 @@ import { selectUser } from 'src/app/services/stores/shared/shared.selector';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  public user$ = this.store.select(selectUser)
-    .pipe(
-      tap(user => console.log('User: ', user))
-    );
-
+  public user$ = this.store.select(selectUser);
   public recentlyPlayed: Track[] = [];
   public newForYou: Track[] = [];
 
