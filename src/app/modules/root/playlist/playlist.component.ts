@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { tap } from 'rxjs';
+import { BehaviorSubject, concat, delay, filter, first, tap } from 'rxjs';
 import { Track } from 'src/app/services/api/models/track';
 import { UserService } from 'src/app/services/api/user.service';
 import { IAppState } from 'src/app/services/stores/app-state';
@@ -15,18 +15,51 @@ import { PlayButtonStyles } from 'src/app/shared/play-button/play-button.compone
   styleUrls: ['./playlist.component.scss']
 })
 export class PlayListComponent implements OnInit {
+  @ViewChild('LoadTracksAnchor')
+  public set loadTracksAnchor(el: ElementRef) {
+    if (this._loadTracksAnchor) {
+      return;
+    }
+
+    this._loadTracksAnchor = el;
+    this.watchForIntersection();
+  }
+
+  private _loadTracksAnchor: any = null;
+
   public tracks: any[] = [];
   public displayedColumns: string[] = ['position', 'name', 'album', 'duration'];
   public playButtonStyleType = PlayButtonStyles.Secondary;
   public currentTrack?: Track = new Track();
   public hoveredTrackId: any = null;
   public totalSongs: number = 0;
+  public currentOffset = 0;
 
   public isTrackPlaying$ = this.store.select(selectPlaySong);
   public currentTrack$ = this.store.select(selectCurrentTrack)
     .pipe(
       tap((track: any) => this.currentTrack = track)
     ).subscribe();
+
+  public observerTriggered$ = new BehaviorSubject(null);
+  public initialTracksLoaded$ = new BehaviorSubject<any[]>([]);
+
+  public handleLoadMoreTracks$ = concat(
+    this.initialTracksLoaded$
+      .pipe(
+        filter((tracks: any[]) => tracks.length > 0),
+        delay(1000),
+        first()
+      ),
+    this.observerTriggered$
+      .pipe(
+        tap((observedEntry: any) => {
+          if (observedEntry.isIntersecting) {
+            this.getMoreTracks();
+          }
+        })
+      )
+  ).subscribe();
 
   constructor(
     private activeRouter: ActivatedRoute,
@@ -37,17 +70,11 @@ export class PlayListComponent implements OnInit {
   public ngOnInit() {
     this.activeRouter.paramMap
       .subscribe(() => {
-        this.userService.getSavedTracks()
-          .subscribe(res => {
-            this.totalSongs = (res as any).total;
-
-            this.tracks = (res as any).items.map((item: any, index: number) => {
-              const track = new Track(item.track);
-              (track as any).position = index + 1;
-
-              return track;
-            });
-
+        this.userService.getSavedTracks(this.currentOffset)
+          .subscribe((res: any) => {
+            this.totalSongs = res.total;
+            this.tracks = this.mapTrackToTableItem(res.items, this.currentOffset);
+            this.initialTracksLoaded$.next(this.tracks);
           });
       });
   }
@@ -66,5 +93,38 @@ export class PlayListComponent implements OnInit {
 
   public playTrack(track: Track) {
     this.store.dispatch(SharedActions.SetCurrentTrack(track, true));
+  }
+
+  private watchForIntersection() {
+    let options = {
+      rootMargin: '0px',
+      threshold: 1.0
+    }
+
+    const callback = (observers: any) => {
+      this.observerTriggered$.next(observers[0]);
+    }
+
+    const observer = new IntersectionObserver(callback, options);
+    observer.observe(this._loadTracksAnchor.nativeElement);
+  }
+
+  private getMoreTracks() {
+    this.currentOffset = this.currentOffset + 20;
+
+    this.userService.getSavedTracks(this.currentOffset)
+      .subscribe((res: any) => {
+        const tracks = this.mapTrackToTableItem(res.items, this.currentOffset);
+        this.tracks = [...this.tracks, ...tracks];
+      });
+  }
+
+  private mapTrackToTableItem(tracks: Track[], startIndex = 0) {
+    return tracks.map((item: any, i: number) => {
+      const track = new Track(item.track);
+      (track as any).position = startIndex + i + 1;
+
+      return track;
+    });
   }
 }

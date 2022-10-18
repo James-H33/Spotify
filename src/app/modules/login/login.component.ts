@@ -33,7 +33,6 @@ export class LoginComponent implements OnDestroy {
     this.store.select(selectToken)
       .pipe(
         takeUntil(this.$destroy),
-        tap(token => console.log('Token: ', token)),
         filter(token => token !== ''),
         switchMap(_ => this.userService.getUser())
       )

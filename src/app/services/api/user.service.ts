@@ -35,10 +35,7 @@ export class UserService {
       'Authorization': `Bearer ${this.token}`
     }
 
-    return this.http.get(url, { headers })
-      .pipe(
-        tap((response) => console.log(response))
-      )
+    return this.http.get(url, { headers });
   }
 
   public getTopArtists(): Observable<TopItemsResponseDto> {
@@ -52,10 +49,7 @@ export class UserService {
       'Authorization': `Bearer ${this.token}`
     }
 
-    return this.http.get(url, { headers, params })
-      .pipe(
-        tap((response) => console.log(response))
-      )
+    return this.http.get(url, { headers, params });
   }
 
   public getTopTracks(): Observable<TopItemsResponseDto> {
@@ -69,26 +63,21 @@ export class UserService {
       'Authorization': `Bearer ${this.token}`
     }
 
-    return this.http.get(url, { headers, params })
-      .pipe(
-        tap((response) => console.log(response))
-      )
+    return this.http.get(url, { headers, params });
   }
 
-  public getSavedTracks() {
+  public getSavedTracks(offset = 0, limit = 20): Observable<TopItemsResponseDto> {
     let url = `${this.baseUrl}/me/tracks`;
     const top: any = new TopItemRequestDto();
     const params = new HttpParams()
-      .set('limit', top.limit)
-      .set('time_range', top.time_range);
+      .set('limit', limit)
+      .set('time_range', top.time_range)
+      .set('offset', offset);
 
     const headers = {
       'Authorization': `Bearer ${this.token}`
     }
 
-    return this.http.get(url, { headers, params })
-      .pipe(
-        tap((response) => console.log(response))
-      )
+    return this.http.get(url, { headers, params });
   }
 }

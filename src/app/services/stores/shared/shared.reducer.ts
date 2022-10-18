@@ -30,8 +30,6 @@ export const sharedReducer = createReducer(
   }),
 
   on(SharedActions.SetAuthToken, (s, { token }) => {
-    console.log('SetAuthToken', token);
-
     return {
       ...s,
       token,
