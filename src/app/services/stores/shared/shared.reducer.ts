@@ -38,7 +38,7 @@ export const sharedReducer = createReducer(
   }),
 
   on(SharedActions.SetCurrentTrack, (s, { track, play }) => {
-  return {
+    return {
       ...s,
       currentTrack: track,
       play

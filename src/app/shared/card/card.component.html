@@ -4,6 +4,7 @@
 
     <div class="card-play-button">
       <app-play-button
+        [isPlaying]="isPlaying"
         (clicked)="onSelectAndPlay($event)">
       </app-play-button>
     </div>

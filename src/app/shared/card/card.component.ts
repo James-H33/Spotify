@@ -10,6 +10,8 @@ import { Track } from 'src/app/services/api/models/track';
 export class CardComponent {
   @Input() public item?: Track = new Track();
   @Output() public selected = new EventEmitter<{track:  Track, play: boolean}>();
+  @Output() public stopPlaying = new EventEmitter();
+  @Input() public isPlaying = false;
 
   @ViewChild('CardImageWrapper')
   public set cardImageWrapper(el: any) {
@@ -43,7 +45,17 @@ export class CardComponent {
 
   public onSelectAndPlay({ event, play }: any) {
     event.stopPropagation();
+
+    if (!play) {
+      this.onStopPlaying();
+      return;
+    }
+
     this.selected.emit({ track: this.item as any, play });
+  }
+
+  public onStopPlaying() {
+    this.stopPlaying.emit();
   }
 
   private adjustCardHeight() {
