@@ -23,6 +23,7 @@ urlencoding = { version = "2.1.0" }
 serde_urlencoded = { version = "0.7.0" }
 rocket_cors = { version = "0.5.2" }
 lazy_static = { version = "1.4.0" }
+dotenv = "0.15.0"
 
 [features]
 # by default Tauri runs in production mode
