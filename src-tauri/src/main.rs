@@ -7,6 +7,9 @@
 
 #[macro_use]
 extern crate rocket;
+extern crate dotenv;
+
+use dotenv::dotenv;
 
 use std::str::FromStr;
 use rocket_cors::AllowedMethods;
@@ -14,19 +17,9 @@ use rocket_cors::{AllowedOrigins, AllowedHeaders};
 
 mod spotify_auth;
 
-#[tauri::command]
-fn get_spotify_auth_url() -> Result<String, String> {
-  let response = spotify_auth::get_spotify_auth_url();
-  let url = response.url;
-
-  if url != "" {
-    Ok(url)
-  } else {
-    Err("No result".into())
-  }
-}
-
 fn main() {
+  dotenv().ok();
+
   let allowed_origins = AllowedOrigins::all();
   let allowed_methods: AllowedMethods = ["Get", "Post", "Delete"]
     .iter()
@@ -58,4 +51,17 @@ fn main() {
     .invoke_handler(tauri::generate_handler![get_spotify_auth_url, spotify_auth::get_token])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
+}
+
+// Commands below are accessible from Client Code (JS)
+#[tauri::command]
+fn get_spotify_auth_url() -> Result<String, String> {
+  let response = spotify_auth::get_spotify_auth_url();
+  let url = response.url;
+
+  if url != "" {
+    Ok(url)
+  } else {
+    Err("No result".into())
+  }
 }

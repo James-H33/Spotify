@@ -1,9 +1,8 @@
+use std::env;
+
 use urlencoding::encode;
 use serde::Deserialize;
 
-static CLIENT_ID: &str = "";
-static SECRET: &str = "";
-static STATE: &str = "";
 static REDIRECT_URI: &str = "http://localhost:8000/spotify-auth-callback";
 static mut AUTH_TOKEN: String = String::new();
 
@@ -24,14 +23,16 @@ pub fn get_spotify_auth_url() -> SpotifyAuthUrl {
   // Scopes -> https://developer.spotify.com/documentation/general/guides/authorization/scopes/
   let scope = encode("user-read-private user-read-email user-top-read user-library-read");
   let redirect_uri = encode(REDIRECT_URI);
+  let state = get_env_var("STATE");
+  let client_id = get_env_var("CLIENT_ID");
 
   unsafe {
     let params: Vec<String> = vec![
       "&response_type=code".to_string(),
-      format!("&client_id={}", CLIENT_ID),
+      format!("&client_id={}", client_id),
       format!("&scope={}", scope.to_string()),
       format!("&redirect_uri={}", redirect_uri),
-      format!("&state={}", STATE),
+      format!("&state={}", state),
     ];
 
 
@@ -66,16 +67,24 @@ pub fn get_token() -> Result<String, String> {
   }
 }
 
+fn get_env_var(key: &str) -> String {
+  let (_, value): (String, String) = env::vars().find(|(k, _)| k == key).unwrap();
+
+  value
+}
+
 async fn get_auth_token(code: &str) -> SpotifyTokenResponse {
   let redirect_uri = REDIRECT_URI;
   let auth_code = "authorization_code";
+  let secret = get_env_var("SECRET");
+  let client_id = get_env_var("CLIENT_ID");
 
   let params = [
     ("code", code),
     ("redirect_uri", redirect_uri),
     ("grant_type", auth_code),
-    ("client_id", CLIENT_ID),
-    ("client_secret", SECRET),
+    ("client_id", &client_id),
+    ("client_secret", &secret),
   ];
 
   let url = "https://accounts.spotify.com/api/token";

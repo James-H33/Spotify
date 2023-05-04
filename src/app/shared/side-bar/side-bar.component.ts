@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { IAppState } from 'src/app/services/stores/app-state';
 
 @Component({
   selector: 'app-side-bar',
@@ -6,8 +8,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./side-bar.component.scss']
 })
 export class SideBarComponent implements OnInit {
+  public isLoggedIn$ = this.store.select(state => state.shared.isLoggedIn);
 
-  constructor() { }
+  constructor(
+    private store: Store<IAppState>
+  ) { }
 
   ngOnInit() {
   }
