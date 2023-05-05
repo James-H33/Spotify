@@ -1,4 +1,4 @@
-<div class="home">
+<div class="home" *ngIf="vm$ | async as vm">
   <section class="home-main">
     <div class="home-header">
       <h1>Good Morning</h1>
@@ -12,6 +12,8 @@
           <ng-container *ngFor="let item of recentlyPlayed">
             <app-card
               (selected)="trackSelected($event)"
+              (stopPlaying)="stopPlaying()"
+              [isPlaying]="(vm.currentTrack?.id === item.id) && vm.isPlaying"
               [item]="item">
             </app-card>
           </ng-container>
