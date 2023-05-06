@@ -1,12 +1,12 @@
-<div class="player">
-  <div class="player-info" *ngIf="currentTrack$ | async as track; else NoTrackSelected">
+<div class="player" *ngIf="vm$ | async as vm">
+  <div class="player-info" *ngIf="vm.track; else NoTrackSelected">
     <div class="player-info-img">
-      <img [src]="track.firstImage.url" alt="">
+      <img [src]="vm.track.firstImage.url" alt="">
     </div>
 
     <div class="player-info-text">
-      <div class="player-info-text-title">{{track.name}}</div>
-      <div class="player-info-text-artist">{{track?.album?.name}}</div>
+      <div class="player-info-text-title">{{vm.track.name}}</div>
+      <div class="player-info-text-artist">{{vm.track?.album?.name}}</div>
     </div>
   </div>
 

@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { PlayButtonModule } from '../play-button/play-button.module';
-import { CardComponent } from './card.component';
+import { TrackCardComponent } from './track-card.component';
 
 @NgModule({
   imports: [
@@ -11,10 +11,10 @@ import { CardComponent } from './card.component';
     RouterModule
   ],
   declarations: [
-    CardComponent
+    TrackCardComponent
   ],
   exports: [
-    CardComponent
+    TrackCardComponent
   ]
 })
-export class CardModule { }
+export class TrackCardModule { }

@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, concat, delay, filter, first, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, concat, delay, filter, first, map, tap } from 'rxjs';
 import { Track } from 'src/app/services/api/models/track';
 import { UserService } from 'src/app/services/api/user.service';
 import { IAppState } from 'src/app/services/stores/app-state';
@@ -34,15 +34,31 @@ export class PlayListComponent implements OnInit {
   public hoveredTrackId: any = null;
   public totalSongs: number = 0;
   public currentOffset = 0;
+  public name = '';
 
   public isTrackPlaying$ = this.store.select(selectPlaySong);
   public currentTrack$ = this.store.select(selectCurrentTrack)
     .pipe(
       tap((track: any) => this.currentTrack = track)
-    ).subscribe();
+    );
 
   public observerTriggered$ = new BehaviorSubject(null);
   public initialTracksLoaded$ = new BehaviorSubject<any[]>([]);
+
+  public vm$ = combineLatest([
+    this.isTrackPlaying$,
+    this.currentTrack$,
+    this.initialTracksLoaded$
+  ])
+    .pipe(
+      map(([isPlaying, currentTrack, tracks]) => {
+        return {
+          isPlaying,
+          currentTrack,
+          tracks
+        };
+      })
+    )
 
   public handleLoadMoreTracks$ = concat(
     this.initialTracksLoaded$
@@ -69,18 +85,32 @@ export class PlayListComponent implements OnInit {
 
   public ngOnInit() {
     this.activeRouter.paramMap
-      .subscribe(() => {
-        this.userService.getSavedTracks(this.currentOffset)
-          .subscribe((res: any) => {
-            this.totalSongs = res.total;
-            this.tracks = this.mapTrackToTableItem(res.items, this.currentOffset);
-            this.initialTracksLoaded$.next(this.tracks);
-          });
+      .pipe(
+        map(params => params.get('id') as string)
+      )
+      .subscribe((id: string) => {
+        if (id === 'liked') {
+          this.userService.getSavedTracks(this.currentOffset)
+            .subscribe((res: any) => {
+              this.name = 'Liked Songs';
+              this.totalSongs = res.total;
+              this.tracks = this.mapTrackToTableItem(res.items, this.currentOffset);
+              this.initialTracksLoaded$.next(this.tracks);
+            });
+        } else {
+          this.userService.getPlaylistTracks(id, this.currentOffset)
+            .subscribe((res: any) => {
+              this.name = res.name;
+              this.totalSongs = res.tracks.total;
+              this.tracks = this.mapTrackToTableItem(res.tracks?.items, this.currentOffset);
+              this.initialTracksLoaded$.next(this.tracks);
+            });
+        }
       });
   }
 
-  public trackSelected(row: any) {
-    console.log(row);
+  public trackSelected(track: Track) {
+    this.store.dispatch(SharedActions.SetCurrentTrack(track, false));
   }
 
   public trackHover(row: any) {

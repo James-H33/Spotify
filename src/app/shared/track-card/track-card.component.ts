@@ -1,15 +1,17 @@
 import { Component, ElementRef, EventEmitter, Inject, Input, Output, ViewChild } from '@angular/core';
 import { fromEvent, Subject, takeUntil, tap } from 'rxjs';
+import { PlayableEntity, PlayableEntityDefaultStrategy, PlayableEntityType } from 'src/app/services/api/models/playable-entity';
 import { Track } from 'src/app/services/api/models/track';
 
 @Component({
-  selector: 'app-card',
-  templateUrl: './card.component.html',
-  styleUrls: ['./card.component.scss']
+  selector: 'app-track-card',
+  templateUrl: './track-card.component.html',
+  styleUrls: ['./track-card.component.scss']
 })
-export class CardComponent {
-  @Input() public item?: Track = new Track();
-  @Output() public selected = new EventEmitter<{track:  Track, play: boolean}>();
+export class TrackCardComponent {
+  @Input() public entityStrategy = PlayableEntityDefaultStrategy;
+  @Input() public item?: PlayableEntity = new PlayableEntity();
+  @Output() public selected = new EventEmitter<{item: PlayableEntity, play: boolean}>();
   @Output() public stopPlaying = new EventEmitter();
   @Input() public isPlaying = false;
 
@@ -25,9 +27,9 @@ export class CardComponent {
   private destroy$ = new Subject<boolean>();
 
   public get image() {
-    const images = this.item?.album?.images;
+    const Strategy = this.entityStrategy;
 
-    return images && images.length > 0 ? images[0] : { url: '' };
+    return new Strategy(this.item).firstImage;
   }
 
   constructor(
@@ -40,18 +42,13 @@ export class CardComponent {
   }
 
   public onSelect() {
-    this.selected.emit({ track: this.item as any, play: false });
+    this.selected.emit({ item: this.item as any, play: false });
   }
 
   public onSelectAndPlay({ event, play }: any) {
     event.stopPropagation();
 
-    if (!play) {
-      this.onStopPlaying();
-      return;
-    }
-
-    this.selected.emit({ track: this.item as any, play });
+    this.selected.emit({ item: this.item as any, play });
   }
 
   public onStopPlaying() {

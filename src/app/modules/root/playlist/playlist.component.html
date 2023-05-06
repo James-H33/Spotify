@@ -1,10 +1,10 @@
-<div class="playlist-container">
+<div class="playlist-container" *ngIf="vm$ | async as vm">
   <div class="playlist-header">
     <div class="playlist-header-image">
-      <ng-container *ngIf="currentTrack?.id; else DefaultBackdrop">
+      <ng-container *ngIf="vm.currentTrack?.id; else DefaultBackdrop">
         <div
           class="playlist-header-image-backdrop"
-          [style]="{ 'background-image': 'url(' + currentTrack?.firstImage?.url + ')' }">
+          [style]="{ 'background-image': 'url(' + vm.currentTrack?.firstImage?.url + ')' }">
         </div>
       </ng-container>
 
@@ -16,7 +16,7 @@
     </div>
 
     <div class="playlist-header-title">
-      <h1>Liked Songs</h1>
+      <h1>{{name}}</h1>
       <p>Total Songs: {{totalSongs}}</p>
     </div>
   </div>
@@ -27,15 +27,15 @@
       <td mat-cell *matCellDef="let element">
         <div class="playlist-play-col">
           {{element.showPlay}}
-          <ng-container *ngIf="hoveredTrackId === element.id || currentTrack?.id === element.id">
+          <ng-container *ngIf="hoveredTrackId === element.id || vm.currentTrack?.id === element.id">
             <app-play-button
               (clicked)="playTrack(element)"
-              [isPlaying]="(currentTrack?.id === element.id)"
+              [isPlaying]="(vm.currentTrack?.id === element.id) && vm.isPlaying"
               [styleType]="playButtonStyleType">
             </app-play-button>
           </ng-container>
 
-          <ng-container *ngIf="hoveredTrackId !== element.id && currentTrack?.id !== element.id">
+          <ng-container *ngIf="hoveredTrackId !== element.id && vm.currentTrack?.id !== element.id">
             {{element.position}}
           </ng-container>
         </div>
@@ -44,7 +44,10 @@
 
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef> Title </th>
-      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      <td mat-cell *matCellDef="let element">
+        <span *ngIf="(vm.currentTrack?.id === element.id)"><b>{{element.name}}</b></span>
+        <span *ngIf="!(vm.currentTrack?.id === element.id)">{{element.name}}</span>
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="album">
