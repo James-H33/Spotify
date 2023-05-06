@@ -4,8 +4,15 @@
 
     <div class="card-play-button">
       <app-play-button
+        *ngIf="!isPlaying"
         [isPlaying]="isPlaying"
         (clicked)="onSelectAndPlay($event)">
+      </app-play-button>
+
+      <app-play-button
+        *ngIf="isPlaying"
+        [isPlaying]="isPlaying"
+        (clicked)="onStopPlaying()">
       </app-play-button>
     </div>
   </div>

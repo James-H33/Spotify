@@ -20,8 +20,9 @@
 
 import { Album } from './album';
 import { Image } from './image';
+import { PlayableEntity } from './playable-entity';
 
-export class Track {
+export class Track implements PlayableEntity {
   public album?: Album;
   public artists?: any[];
   public available_markets?: string[];

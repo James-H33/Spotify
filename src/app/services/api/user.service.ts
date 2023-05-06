@@ -66,6 +66,35 @@ export class UserService {
     return this.http.get(url, { headers, params });
   }
 
+  public getPlaylists(): Observable<TopItemsResponseDto> {
+    let url = `${this.baseUrl}/me/playlists`;
+    const top: any = new TopItemRequestDto();
+    const params = new HttpParams()
+      .set('limit', top.limit)
+      .set('time_range', top.time_range);
+
+    const headers = {
+      'Authorization': `Bearer ${this.token}`
+    }
+
+    return this.http.get(url, { headers, params });
+  }
+
+  public getPlaylistTracks(id: string, offset = 0, limit = 20): Observable<TopItemsResponseDto> {
+    let url = `${this.baseUrl}/playlists/${id}`;
+    const top: any = new TopItemRequestDto();
+    const params = new HttpParams()
+      .set('limit', limit)
+      .set('time_range', top.time_range)
+      .set('offset', offset);
+
+    const headers = {
+      'Authorization': `Bearer ${this.token}`
+    }
+
+    return this.http.get(url, { headers, params });
+  }
+
   public getSavedTracks(offset = 0, limit = 20): Observable<TopItemsResponseDto> {
     let url = `${this.baseUrl}/me/tracks`;
     const top: any = new TopItemRequestDto();

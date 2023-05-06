@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatSliderChange } from '@angular/material/slider';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, combineLatest, filter, map, of, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, filter, map, of, startWith, switchMap, tap } from 'rxjs';
 import { IAppState } from 'src/app/services/stores/app-state';
 import { SharedActions } from 'src/app/services/stores/shared/shared.actions';
 import { selectCurrentTrack, selectPlaySong } from 'src/app/services/stores/shared/shared.selector';
@@ -21,7 +21,7 @@ export class PlayerComponent {
 
   public hasTrack = false;
 
-  public currentTrack$ = this.store.select(selectCurrentTrack)
+  public currentTrack$: Observable<any> = this.store.select(selectCurrentTrack)
     .pipe(
       tap(track => track ? this.hasTrack = true : this.hasTrack = false),
       tap(() => this.audioPlayer?.pause()),
@@ -29,25 +29,28 @@ export class PlayerComponent {
       tap(() => this.stopCurrentTimeUpdater()),
       tap((t: any) => this.audioPlayer = new Audio(t?.preview_url)),
       tap((t: any) => this.audioPlayer.volume = this.volumeControl.value),
-      switchMap((t) =>
-        combineLatest([
-            of(t),
-            this.canPlay().pipe(filter(isDone => isDone))
-          ])
-      ),
+      switchMap((t) => {
+        return combineLatest([
+              of(t),
+              this.canPlay().pipe(filter(isDone => isDone))
+            ])
+          }
+        ),
       tap(([t, _]) => this.setDurationTime()),
-      map(([track, _]) => track)
+      map(([track, _]) => track),
     );
 
   public playSong$ = this.store.select(selectPlaySong);
 
-  public songMediator$ = combineLatest([
+  public vm$ = combineLatest([
     this.currentTrack$,
     this.playSong$
   ])
     .pipe(
-      tap(([t, play]) => this.playCurrentTrack(play))
-    ).subscribe();
+      startWith([null, false]),
+      tap(([t, play]: any) => this.playCurrentTrack(play)),
+      map(([t, play]: any) => ({ track: t, play }))
+    );
 
   public currentTime = '00:00';
   public duration = '00:00';

@@ -10,12 +10,28 @@
 
         <div class="home-content-cards">
           <ng-container *ngFor="let item of recentlyPlayed">
-            <app-card
+            <app-track-card
               (selected)="trackSelected($event)"
               (stopPlaying)="stopPlaying()"
               [isPlaying]="(vm.currentTrack?.id === item.id) && vm.isPlaying"
+              [entityStrategy]="trackCardStrategy"
               [item]="item">
-            </app-card>
+            </app-track-card>
+          </ng-container>
+        </div>
+      </div>
+
+      <div class="home-content-header">
+        <h2>Playlists</h2>
+
+        <div class="home-content-cards">
+          <ng-container *ngFor="let item of playlists">
+            <app-track-card
+              (selected)="playlistSelected($event)"
+              (stopPlaying)="stopPlaying()"
+              [isPlaying]="(vm.currentTrack?.id === item.id) && vm.isPlaying"
+              [item]="item">
+            </app-track-card>
           </ng-container>
         </div>
       </div>
